@@ -1,0 +1,124 @@
+package Tree;
+
+import java.util.Scanner;
+
+
+public class BalancedTree 
+{
+
+	/**
+	 * Program to determine if the tree is balanced for each test case .
+	 */
+	private int leftHeight ; 
+	private int rightHeight ;
+	
+	BalancedTree()
+	{
+		leftHeight = 0;
+		rightHeight = 0;
+	}
+	
+	public static void main(String[] args) 
+	{
+		BalancedTree balTree = new BalancedTree();
+		SumOfDepths sumofdepths = new SumOfDepths();
+		// Tree to store the value
+		BSTree node = new MyBSTree();
+	    Scanner input= new Scanner(System.in);
+	    try
+	    {
+	    	// taking the number of cases
+	       int iter = input.nextInt();
+	       for(int z=0;z<iter;z++)
+	       {
+	        int dataLength = input.nextInt();
+	        // stores the sequence of operations and numbers
+	        String cases = input.nextLine();
+	        // using deliminator it seperates the operations and value
+	        String delim= " ";
+	        String tokens[] = cases.split(delim);
+	        for(int j=0;j<tokens.length;j++)
+	        {
+	        	// perform insert and delete
+	        	if(tokens[j].equals("i"))
+	        	{
+	        		int value = Integer.parseInt(tokens[j+1]);
+	        		node.insertNode(value,MyBSTree.rootNode);
+	        	}
+	        	if(tokens[j].equals("r"))
+	        	{
+	        		int value = Integer.parseInt(tokens[j+1]);
+	                node.delete(value,MyBSTree.rootNode) ;
+	        	}
+	        }
+	        
+	        sumofdepths.getHeight(MyBSTree.rootNode);
+	        sumofdepths.getSumofHeight(MyBSTree.rootNode);
+	        //System.out.println(sumofdepths.sumOfHeight);
+	        
+	        if(MyBSTree.rootNode.leftNode != null)
+	        	balTree.getHeightLeft(MyBSTree.rootNode.leftNode);
+	        
+	        if(MyBSTree.rootNode.rightNode != null)
+	        	balTree.getHeightRight(MyBSTree.rootNode.rightNode);
+	        
+//	        System.out.println("Left Height "+ balTree.leftHeight);
+//	        System.out.println("Right Height "+ balTree.rightHeight);
+	        
+	        if((balTree.leftHeight - balTree.rightHeight) > 1 || (balTree.leftHeight - balTree.rightHeight) < -1)
+	        {
+	        	System.out.println("NO"); 
+	        }
+	        else
+	        	System.out.println("YES");
+	        
+//	        node.display(MyBSTree.rootNode);
+//	        System.out.println();
+	        node = new MyBSTree();
+	        sumofdepths = new SumOfDepths();
+	        balTree = new BalancedTree();
+	        
+	       }
+	    }
+	    catch(Exception e)
+	    {
+	    	e.printStackTrace();
+	    	System.out.println(e.toString());
+	    	System.out.println("Unhandled input...");
+	    }
+	    finally
+	    {
+	     input.close();
+	    }
+	}
+
+	private void getHeightRight(Node rightNode) 
+	{
+		if(rightNode == null)
+            return;
+//		System.out.println("r "+rightNode.data);
+		if(rightNode.height > rightHeight)
+		{
+			rightHeight = rightNode.height;
+		}
+        
+		getHeightRight(rightNode.leftNode);
+		getHeightRight(rightNode.rightNode);
+	}
+
+	private void getHeightLeft(Node leftNode) 
+	{
+		if(leftNode == null)
+            return;
+//		System.out.println("l "+leftNode.data);
+		if(leftNode.height > leftHeight)
+		{
+			leftHeight = leftNode.height;
+		}
+        
+		getHeightLeft(leftNode.leftNode);
+		getHeightLeft(leftNode.rightNode);
+		
+	}
+
+}
