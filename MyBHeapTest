@@ -1,0 +1,62 @@
+package Tree;
+
+import java.util.Scanner;
+
+
+public class MyBHeapTest
+{
+
+	/**
+	 * Program to implement Binary heap using arrayList
+	 */
+	
+	public static void main(String[] args) 
+	{
+		// Binary heap to store the value
+		BHeap node = new MyBHeap();
+	    Scanner input= new Scanner(System.in);
+	    try
+	    {
+	    	// taking the number of cases
+	       int iter = input.nextInt();
+	       for(int z=0;z<iter;z++)
+	       {
+	        int dataLength = input.nextInt();
+	        // stores the sequence of operations and numbers
+	        String cases = input.nextLine();
+	        // using deliminator it seperates the operations and value
+	        String delim= " ";
+	        String tokens[] = cases.split(delim);
+	        for(int j=0;j<tokens.length;j++)
+	        {
+	        	// perform insert and delete
+	        	if(tokens[j].equals("i"))
+	        	{
+	        		int value = Integer.parseInt(tokens[j+1]);
+	        		node.insertBHeap(value);
+	        	}
+	        	if(tokens[j].equals("r"))
+	        	{
+	                node.deleteMinimum();
+	        	}
+	        }
+	        // print the final result
+	        // reinitiaize the tree 
+	        node.displayHeap();
+//	        node.displayDulicates();
+	        node = new MyBHeap();
+	        
+	       }
+	    }
+	    catch(Exception e)
+	    {
+	    	System.out.println(e.toString());
+	        System.out.println("Unhandled input...");
+	    }
+	    finally
+	    {
+	     input.close();
+	    }
+	}
+
+}
