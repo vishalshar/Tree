@@ -1,0 +1,11 @@
+package Tree;
+
+
+public interface BSTree 
+{
+//	Node rootNode = null;
+	public void insertNode(int number, Node root);
+	public void delete(int number,Node root);
+	public void displayPreOrder(Node n);
+	public void displayInOrder(Node n);
+}
