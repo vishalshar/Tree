@@ -1,0 +1,46 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package Tree;
+
+import java.util.LinkedList;
+
+/**
+ *
+ * @author Vishal
+ */
+
+public class HeapUsingLinkedList 
+{
+    LinkedList<Integer> list = new LinkedList<Integer>();
+    
+    public static void main(String args)
+    {
+        
+
+    }
+    public void insert(int x)
+    {
+        list.add(x);
+        checkInsert(list.size()-1);
+    }
+
+    private void checkInsert(int i) 
+    {
+        if(i==1)
+            return;
+        int parent = i/2;
+        // min heap
+        if(list.get(parent) > list.get(i))
+        {
+            int temp = list.get(i);
+            list.set(i, list.get(parent));
+            list.set(parent, temp);
+            checkInsert(parent);
+        }
+        return;
+    }
+}
