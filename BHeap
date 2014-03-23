@@ -1,0 +1,13 @@
+package Tree;
+
+import java.util.ArrayList;
+
+
+public interface BHeap 
+{
+	public void deleteMiniSort();
+	public ArrayList<Integer> numbers = new ArrayList<Integer>();
+	public void insertBHeap(int number);
+	public void deleteMinimum();
+	public void displayHeap();
+}
