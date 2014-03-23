@@ -1,0 +1,263 @@
+package Tree;
+
+import java.util.*;
+
+
+public class MyBHeap implements BHeap
+{
+
+	/**
+	 * Program to implement the binary Heap using arrayList
+	 */
+	
+	protected static ArrayList<Integer> numbers = new ArrayList<Integer>();
+	
+	MyBHeap()
+	{
+		numbers.clear();
+		numbers.add(null);
+	}
+	
+	public void insertBHeap(int number)
+	{
+		numbers.add(number);
+		checkInsert(numbers.size()-1);
+	}
+	
+	public void checkInsert(int size)
+	{
+//		System.out.println(size);
+		if(size == 1)
+			return;
+		else
+		{
+			int parent = size/2;
+
+			if(numbers.get(parent) >= numbers.get(size))
+			{
+
+				int temp = numbers.get(parent);
+				
+				numbers.add(parent, numbers.get(size));
+				numbers.remove(parent+1);
+				
+				numbers.add(size,temp);
+				numbers.remove(size+1);
+				
+				checkInsert(parent);
+			}
+			else
+			{
+				return;
+			}
+		}
+	}
+	
+	public void checkDelete(int parent)
+	{
+		int leftChild = parent*2;
+		int rightChild = (parent*2 +1);
+//		System.out.println("Left child "+leftChild +"Right Child"+rightChild+" Size "+(numbers.size()));
+		
+		
+		if(rightChild >= (numbers.size()) && leftChild <= (numbers.size()-1) )
+		{
+			if(numbers.get(parent) > numbers.get(leftChild))
+			{
+				int temp = numbers.get(parent);
+				numbers.add(parent, numbers.get(leftChild));
+				numbers.remove(parent+1);
+			
+				numbers.add(leftChild,temp);
+				numbers.remove(leftChild+1);
+			}
+			return;
+		}
+		
+		if( ( leftChild > (numbers.size()-1) ) && ( rightChild > (numbers.size()-1) ) )
+		{
+			return;
+		}
+		if(numbers.get(parent) >= numbers.get(leftChild) || numbers.get(parent) >= numbers.get(rightChild))
+		{
+			if(numbers.get(leftChild) > numbers.get(rightChild))
+			{
+//				System.out.println();
+//				System.out.println();
+//				System.out.println();
+//				displayHeap();
+				int temp = numbers.get(parent);
+				numbers.add(parent,numbers.get(rightChild));
+				numbers.remove(parent+1);
+//				displayHeap();
+				numbers.add(rightChild,temp);
+				numbers.remove(rightChild+1);
+//				displayHeap();
+				checkDelete(rightChild);
+				return;
+			}
+			
+			if(numbers.get(leftChild) <= numbers.get(rightChild))
+			{
+//				System.out.println();
+//				System.out.println();
+//				System.out.println();
+//				displayHeap();
+				int temp = numbers.get(parent);
+				numbers.add(parent, numbers.get(leftChild));
+//				displayHeap();
+				numbers.remove(parent+1);
+//				displayHeap();
+				numbers.add(leftChild,temp);
+//				displayHeap();
+				numbers.remove(leftChild+1);
+//				displayHeap();
+				
+				checkDelete(leftChild);
+				return;
+			}
+		}
+	}
+	
+	public void deleteMinimum()
+	{
+		int lastNumber = numbers.get(numbers.size()-1);
+//		System.out.println("Last number "+lastNumber);
+		numbers.remove(numbers.size()-1);
+		numbers.add(1,lastNumber);
+		numbers.remove(2);
+//		displayHeap();
+		checkDelete(1);
+	}
+	
+	public void deleteMiniSort()
+	{
+//		displayHeap();
+//		Collections.sort(numbers);
+//		System.out.println(numbers.toString());
+		int length = numbers.size();
+		for(int j=0;j<=(length-1);j++)
+	    {
+//			System.out.print("dfwd");
+//        	System.out.print("SIZE "+numbers.size()+" ");
+//			displayHeap();
+			if(numbers.size() == 2)
+			{
+				System.out.print(numbers.remove(1)+" ");
+				return;
+			}
+        	int lastNumber = numbers.get(numbers.size()-1);
+//        	System.out.print("Last number "+lastNumber+" ");
+        	numbers.remove(numbers.size()-1);
+        	numbers.add(1,lastNumber);
+        	System.out.print( numbers.remove(2)+" ");
+//        	System.out.print("SIZE "+numbers.size()+" ");
+//        	displayHeap();
+        	if(numbers.size()>2)
+        		checkDelete(1);
+		}
+//		System.out.println();
+	}
+	
+	public void displayHeap()
+	{
+		for(int i=1;i<numbers.size();i++)
+		{
+			System.out.print(numbers.get(i)+" ");
+		}
+		System.out.println();
+	}
+	
+//	public static void main(String[] args) 
+//	{
+//		MyBHeap heap = new MyBHeap();
+//		
+//		heap.insertBHeap(166);
+//		heap.insertBHeap(549);
+//		heap.deleteMinimum();
+//		heap.insertBHeap(330);
+//		heap.insertBHeap(552);
+//		heap.insertBHeap(255);
+//		heap.insertBHeap(858);
+//		heap.insertBHeap(672);
+//		heap.insertBHeap(884);
+//		heap.deleteMinimum();
+////		heap.deleteMinimum();
+////		
+//		heap.insertBHeap(637);
+//		heap.insertBHeap(898);
+//		heap.insertBHeap(260);
+////		heap.deleteMinimum();
+////		
+//		heap.insertBHeap(243);
+//		heap.deleteMinimum();
+//		heap.insertBHeap(771);
+//		heap.insertBHeap(768);
+//		
+////		
+//		heap.insertBHeap(739);
+//		heap.insertBHeap(975);
+//		heap.deleteMinimum();
+//		heap.insertBHeap(550);
+//		heap.deleteMinimum();
+//		heap.insertBHeap(600);
+//		heap.deleteMinimum();
+//		
+//		heap.insertBHeap(263);
+//		heap.insertBHeap(445);
+//		heap.insertBHeap(712);
+//		heap.insertBHeap(889);
+//		heap.insertBHeap(97);
+//		heap.insertBHeap(988);
+//		heap.insertBHeap(72);
+//		heap.insertBHeap(582);
+//		heap.insertBHeap(892);
+//		heap.deleteMinimum();
+//		heap.deleteMinimum();
+//		heap.deleteMinimum();
+//		heap.insertBHeap(545);
+////		heap.deleteMinimum();
+////		heap.deleteMinimum();
+////		heap.deleteMinimum();
+////		heap.deleteMinimum();
+//	
+//		
+//////		System.out.println("MINI ");
+////		heap.deleteMinimum();
+////		
+////		heap.insertBHeap(480);
+////		heap.insertBHeap(45);
+////		heap.insertBHeap(327);
+////		heap.deleteMinimum();
+////		
+////		heap.insertBHeap(27);
+////		heap.insertBHeap(738);
+////		System.out.println("MINI ");
+////		heap.deleteMinimum();
+//		
+//		
+////		heap.insertBHeap(338);
+////		heap.insertBHeap(338);
+////		heap.insertBHeap(338);
+////		heap.insertBHeap(338);
+////		heap.insertBHeap(338);
+//		
+//		
+////		
+////		heap.insertBHeap(1);
+////		
+////		heap.deleteMinimum();
+////		heap.insertBHeap(0);
+////		
+////		heap.insertBHeap(5);
+////		heap.insertBHeap(0);
+////		heap.insertBHeap(6);
+////		heap.insertBHeap(0);
+////		heap.displayHeap();
+//		heap.displayHeap();
+//		
+//		System.out.println(heap.numbers.size());
+//		
+//	}
+
+}
