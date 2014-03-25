@@ -1,0 +1,111 @@
+package Tree;
+
+import java.util.Scanner;
+
+
+public class SumOfDepths 
+{
+
+	/**
+	 * Program to output the sum of the depths of all the nodes for each test case .
+	 */
+	
+	public int sumOfHeight =0;
+	
+	SumOfDepths()
+	{
+		sumOfHeight=0;
+	}
+	
+	
+	public void getSumofHeight(Node parent)
+	{
+		if(parent == null)
+            return;
+        
+//        System.out.println("Data "+n.data+" Height "+n.height);
+		sumOfHeight+=parent.height;
+        
+		getSumofHeight(parent.leftNode);
+		getSumofHeight(parent.rightNode);
+	}
+	
+	
+	public void getHeight(Node n)
+    {
+        if(n==null)
+            return;
+        
+        //System.out.println("Data "+n.data+" Height "+n.height);
+        
+        if(n.leftNode!=null)
+        {
+        	n.leftNode.height = n.height+1;
+        }
+        
+        if(n.rightNode!=null)
+        {
+        	n.rightNode.height = n.height+1;
+        }
+        
+        getHeight(n.leftNode);
+        getHeight(n.rightNode);
+    }
+	
+	
+	
+	public static void main(String[] args) 
+	{
+		SumOfDepths sumofdepths = new SumOfDepths();
+		// Tree to store the value
+		BSTree node = new MyBSTree();
+	    Scanner input= new Scanner(System.in);
+	    try
+	    {
+	    	// taking the number of cases
+	       int iter = input.nextInt();
+	       for(int z=0;z<iter;z++)
+	       {
+	        int dataLength = input.nextInt();
+	        // stores the sequence of operations and numbers
+	        String cases = input.nextLine();
+	        // using deliminator it seperates the operations and value
+	        String delim= " ";
+	        String tokens[] = cases.split(delim);
+	        for(int j=0;j<tokens.length;j++)
+	        {
+	        	// perform insert and delete
+	        	if(tokens[j].equals("i"))
+	        	{
+	        		int value = Integer.parseInt(tokens[j+1]);
+	        		node.insertNode(value,MyBSTree.rootNode);
+	        	}
+	        	if(tokens[j].equals("r"))
+	        	{
+	        		int value = Integer.parseInt(tokens[j+1]);
+	                node.delete(value,MyBSTree.rootNode) ;
+	        	}
+	        }
+	        
+	        sumofdepths.getHeight(MyBSTree.rootNode);
+	        sumofdepths.getSumofHeight(MyBSTree.rootNode);
+	        System.out.println(sumofdepths.sumOfHeight);
+//	        node.display(MyBSTree.rootNode);
+//	        System.out.println();
+	        node = new MyBSTree();
+	        sumofdepths = new SumOfDepths();
+	        
+	       }
+	    }
+	    catch(Exception e)
+	    {
+	    	System.out.println(e.toString());
+	    	System.out.println("Unhandled input...");
+	    }
+	    finally
+	    {
+	     input.close();
+	    }
+	}
+
+}
