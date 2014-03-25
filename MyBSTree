@@ -1,0 +1,427 @@
+package Tree;
+
+import java.util.*;
+
+class Node {
+
+    /**
+     * Class to implement a node of the link list Will contains the data and the
+     * link to previous node
+     */
+    public int data; // To store the data
+    public int height;
+    public Node leftNode;
+    public Node rightNode;
+
+    Node(int value) {
+        data = value;
+        leftNode = null;
+        rightNode = null;
+    }
+
+    Node() {
+        data = 0;
+        leftNode = null;
+        rightNode = null;
+
+        height = 0;
+    }
+}
+
+public class MyBSTree implements BSTree {
+
+    public static Node rootNode;
+    public static int numberOfNode;
+    public static ArrayList<Integer> duplicates = new ArrayList<Integer>();
+    public Node minimum;
+
+    MyBSTree() {
+        rootNode = null;
+        numberOfNode = 0;
+        duplicates.clear();
+        minimum = null;
+
+    }
+
+    public void insertNode(int number, Node root) {
+        if (root == null) {
+            rootNode = new Node();
+            rootNode.data = number;
+            numberOfNode++;
+            return;
+        } else {
+
+            if (root.data > number) {
+                if (root.leftNode != null) {
+                    insertNode(number, root.leftNode);
+                } else {
+                    Node temp = new Node(number);
+                    root.leftNode = temp;
+                    numberOfNode++;
+                    return;
+                }
+            }
+
+            if (root.data < number) {
+
+                if (root.rightNode != null) {
+                    insertNode(number, root.rightNode);
+                } else {
+                    Node temp = new Node(number);
+                    root.rightNode = temp;
+                    numberOfNode++;
+                    return;
+                }
+
+            }
+
+            if (root.data == number) {
+//				System.out.println("duplicate "+number);
+                duplicates.add(number);
+                return;
+            }
+        }
+    }
+
+    public void delete(int number, Node root) {
+
+        if (numberOfNode == 1) {
+            if (root.data == number) {
+                rootNode = null;
+                numberOfNode--;
+                return;
+            }
+        }
+
+        if (rootNode.data == number) {
+            if (rootNode.leftNode == null && rootNode.rightNode != null) {
+//				System.out.println("Right not Null "+rootNode.data );
+
+                Node temp = rootNode.rightNode;
+                rootNode = null;
+                rootNode = temp;
+                numberOfNode--;
+//				System.out.println("Root "+ rootNode.data);
+                return;
+            }
+
+            if (rootNode.rightNode == null && rootNode.leftNode != null) {
+//				System.out.println("Left not null "+rootNode.data);
+                Node temp = rootNode.leftNode;
+                rootNode = null;
+                rootNode = temp;
+                numberOfNode--;
+//				System.out.println("Root "+ rootNode.data);
+                return;
+            }
+
+            if (rootNode.leftNode != null && rootNode.rightNode != null) {
+                findMinimum(rootNode.rightNode);
+
+//				System.out.println("Min data "+min.data);
+//				System.out.println("Node deleted"+ rootNode.data);
+                if (minimum.data != rootNode.rightNode.data) {
+                    minimum.rightNode = rootNode.rightNode;
+                    minimum.leftNode = rootNode.leftNode;
+                    rootNode = minimum;
+                    minimum = null;
+                    numberOfNode--;
+
+//					System.out.println("Root "+ rootNode.data);
+                    return;
+                } else {
+                    minimum.leftNode = rootNode.leftNode;
+                    rootNode = minimum;
+                    minimum = null;
+                    numberOfNode--;
+
+//					System.out.println("Root "+ rootNode.data);
+                    return;
+                }
+            }
+        }
+
+        if (root.data > number && root.leftNode != null) {
+            Node tempLeft = root.leftNode;
+            if (tempLeft != null && tempLeft.data == number) {
+                if (tempLeft.leftNode == null && tempLeft.rightNode == null) {
+//					System.out.println("Node deleted"+ root.leftNode.data);
+                    root.leftNode = null;
+                    numberOfNode--;
+                    return;
+                }
+                if (tempLeft.leftNode == null && tempLeft.rightNode != null) {
+//					System.out.println("Node deleted"+ root.leftNode.data);
+                    root.leftNode = tempLeft.rightNode;
+                    numberOfNode--;
+                    return;
+                }
+                if (tempLeft.leftNode != null && tempLeft.rightNode == null) {
+//					System.out.println("Node deleted"+ root.leftNode.data);
+                    root.leftNode = tempLeft.leftNode;
+                    numberOfNode--;
+                    return;
+                }
+                if (tempLeft.leftNode != null && tempLeft.rightNode != null) {
+//					Node min = 
+                    findMinimum(tempLeft.rightNode);
+//					System.out.println("Node deleted"+ root.leftNode.data);
+                    if (minimum.data != tempLeft.rightNode.data) {
+                        minimum.rightNode = tempLeft.rightNode;
+                        minimum.leftNode = tempLeft.leftNode;
+                        root.leftNode = minimum;
+                        numberOfNode--;
+                        minimum = null;
+                        return;
+                    } else {
+                        minimum.leftNode = tempLeft.leftNode;
+                        root.leftNode = minimum;
+                        numberOfNode--;
+                        minimum = null;
+                        return;
+                    }
+                }
+
+            }
+            delete(number, root.leftNode);
+        }
+
+        if (root.data < number && root.rightNode != null) {
+            Node tempRight = root.rightNode;
+            if (tempRight != null && tempRight.data == number) {
+                if (tempRight.leftNode == null && tempRight.rightNode == null) {
+//					System.out.println("Node deleted"+ root.rightNode.data);
+                    root.rightNode = null;
+                    numberOfNode--;
+                    return;
+                }
+                if (tempRight.leftNode == null && tempRight.rightNode != null) {
+//					System.out.println("Node deleted"+ root.rightNode.data);
+                    root.rightNode = tempRight.rightNode;
+                    numberOfNode--;
+                    return;
+                }
+                if (tempRight.leftNode != null && tempRight.rightNode == null) {
+//					System.out.println("Node deleted"+ root.rightNode.data);
+                    root.rightNode = tempRight.leftNode;
+                    numberOfNode--;
+                    return;
+                }
+                if (tempRight.leftNode != null && tempRight.rightNode != null) {
+//					Node min = findMinimum(tempRight.rightNode);
+                    findMinimum(tempRight.rightNode);
+//					System.out.println("Min data "+ min.data);
+//					System.out.println("Node deleted"+ root.rightNode.data);
+
+                    if (minimum.data != tempRight.rightNode.data) {
+                        minimum.rightNode = tempRight.rightNode;
+                        minimum.leftNode = tempRight.leftNode;
+                        root.rightNode = minimum;
+                        numberOfNode--;
+                        minimum = null;
+                        return;
+                    } else {
+                        minimum.leftNode = tempRight.leftNode;
+                        root.rightNode = minimum;
+                        numberOfNode--;
+                        minimum = null;
+                        return;
+                    }
+
+                }
+
+            }
+            delete(number, root.rightNode);
+        }
+    }
+
+    public void findMinimum(Node parent) {
+        if ((parent.leftNode == null && parent.rightNode == null)) {
+//			System.out.println(" 1 "+ parent.data);
+            minimum = parent;
+        }
+        if (parent.leftNode != null) {
+
+            Node temp = parent.leftNode;
+
+            if (temp.leftNode == null && temp.rightNode == null) {
+//				System.out.println("Minimum "+temp.data);
+                parent.leftNode = null;
+                minimum = temp;
+            } else if (temp.leftNode == null && temp.rightNode != null) {
+                parent.leftNode = temp.rightNode;
+                minimum = temp;
+//				System.out.println("Minimum "+temp.data);
+            }
+            findMinimum(temp);
+        } else {
+            minimum = parent;
+//			System.out.println(" 2 "+ parent.data);
+        }
+    }
+
+    public void displayPreOrder(Node n) {
+        if (n == null) {
+            return;
+        }
+        System.out.print(n.data + " ");
+        displayPreOrder(n.leftNode);
+//        System.out.print(n.data+"\t");
+        displayPreOrder(n.rightNode);
+    }
+
+    public void displayDulicates() {
+        System.out.println();
+        for (int i = 0; i < duplicates.size(); i++) {
+//			int value = ;
+            System.out.println(duplicates.get(i));
+        }
+
+    }
+
+    public void displayInOrder(Node n) {
+        if (n == null) {
+            return;
+        }
+
+//        System.out.print(n.data+"\t");
+        displayInOrder(n.leftNode);
+
+        for (int i = 0; i < duplicates.size(); i++) {
+            if (n.data == duplicates.get(i)) {
+                System.out.print(n.data + " ");
+            }
+        }
+        System.out.print(n.data + " ");
+
+        displayInOrder(n.rightNode);
+    }
+
+    public static void main(String[] args) {
+
+        BSTree node = new MyBSTree();
+        BSTree node2 = new MyBSTree();
+        
+        node.insertNode(10, rootNode);
+        node2.insertNode(10, rootNode);
+        
+        node.insertNode(11, rootNode);
+        node2.insertNode(11, rootNode);
+        
+        node.insertNode(9, rootNode);
+        node2.insertNode(9, rootNode);
+        
+        
+        /*node.insertNode(842, rootNode);
+        node.insertNode(960, rootNode);
+        node.delete(960, rootNode);
+        node.insertNode(686, rootNode);
+        node.insertNode(758, rootNode);
+        node.delete(842, rootNode);
+        node.delete(758, rootNode);
+        node.insertNode(202, rootNode);
+        node.insertNode(119, rootNode);
+        node.insertNode(293, rootNode);
+        node.delete(119, rootNode);
+        node.insertNode(344, rootNode);
+        node.insertNode(408, rootNode);
+        node.insertNode(66, rootNode);
+        node.insertNode(57, rootNode);
+        node.insertNode(357, rootNode);
+        node.insertNode(259, rootNode);
+        node.insertNode(181, rootNode);
+        node.insertNode(813, rootNode);
+        node.insertNode(648, rootNode);
+        node.delete(66, rootNode);
+        node.insertNode(311, rootNode);
+        node.delete(344, rootNode);
+        node.insertNode(91, rootNode);
+        node.insertNode(126, rootNode);
+        node.delete(311, rootNode);
+        node.delete(126, rootNode);
+        node.insertNode(954, rootNode);
+        node.insertNode(737, rootNode);
+        node.delete(57, rootNode);
+        node.delete(202, rootNode);
+        node.insertNode(153, rootNode);
+        node.insertNode(398, rootNode);
+        node.insertNode(568, rootNode);
+        node.insertNode(307, rootNode);
+        node.insertNode(401, rootNode);
+        node.insertNode(771, rootNode);
+        node.insertNode(633, rootNode);
+        node.insertNode(981, rootNode);
+        node.insertNode(852, rootNode);
+        node.delete(633, rootNode);
+        node.delete(737, rootNode);
+        node.insertNode(569, rootNode);
+        node.insertNode(649, rootNode);
+        node.delete(408, rootNode);
+        node.delete(153, rootNode);
+        node.insertNode(136, rootNode);
+        node.delete(568, rootNode);
+        node.delete(649, rootNode);
+        node.delete(648, rootNode);
+        node.insertNode(684, rootNode);
+        node.insertNode(693, rootNode);
+        node.delete(136, rootNode);
+        node.delete(686, rootNode);
+        node.insertNode(37, rootNode);
+        node.insertNode(325, rootNode);
+        node.insertNode(938, rootNode);
+        node.insertNode(843, rootNode);
+        node.delete(181, rootNode);
+        node.delete(293, rootNode);
+        node.insertNode(995, rootNode);
+        node.insertNode(6, rootNode);
+        node.insertNode(912, rootNode);
+        node.insertNode(966, rootNode);
+        node.delete(569, rootNode);
+
+        node.insertNode(275, rootNode);
+        node.insertNode(255, rootNode);
+        node.insertNode(6, rootNode);
+        node.insertNode(601, rootNode);
+        node.insertNode(475, rootNode);
+        node.insertNode(98, rootNode);
+        node.insertNode(513, rootNode);
+        node.insertNode(10, rootNode);
+        node.insertNode(393, rootNode);
+        node.insertNode(189, rootNode);
+        node.insertNode(790, rootNode);
+        node.insertNode(520, rootNode);
+        node.delete(601, rootNode);
+        node.insertNode(723, rootNode);
+
+        node.insertNode(3, rootNode);
+        node.delete(5, rootNode);
+        node.insertNode(2, rootNode);
+        node.insertNode(0, rootNode);
+        node.insertNode(1, rootNode);
+        node.insertNode(11, rootNode);
+        node.insertNode(06, rootNode);
+        node.insertNode(12, rootNode);
+
+        node.delete(5, rootNode);
+        node.delete(11, rootNode);
+        node.insertNode(5, rootNode);
+        node.delete(2, rootNode);
+        //node.delete(1, rootNode);
+        node.insertNode(11, rootNode);
+        node.insertNode(13, rootNode);
+        node.delete(6, rootNode);
+
+        node.insertNode(2, rootNode);
+        node.insertNode(0, rootNode);
+        node.insertNode(1, rootNode);
+        node.insertNode(11, rootNode);
+        node.insertNode(06, rootNode);
+        node.insertNode(12, rootNode);
+        node.insertNode(5, rootNode);
+        node.insertNode(4, rootNode);
+        node.delete(2, rootNode);*/
+        System.out.println(numberOfNode);
+        node.displayInOrder(rootNode);
+        node2.displayInOrder(rootNode);
+    }
+}
