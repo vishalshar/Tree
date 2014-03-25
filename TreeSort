@@ -1,0 +1,59 @@
+package Tree;
+
+import java.util.Scanner;
+
+
+public class TreeSort 
+{
+
+	/**
+	 * Program to Use a binary search tree to sort a list of numbers.
+	 */
+	public static void main(String[] args) 
+	{
+		// Tree to store the value
+		BSTree node = new MyBSTree();
+	    Scanner input= new Scanner(System.in);
+	    try
+	    {
+	    	// taking the number of cases
+	       int iter = input.nextInt();
+	       for(int z=0;z<iter;z++)
+	       {
+	        int dataLength = input.nextInt();
+	        // stores the sequence of operations and numbers
+	        String cases = input.nextLine();
+	        // using deliminator it seperates the operations and value
+	        String delim= " ";
+	        String tokens[] = cases.split(delim);
+	        for(int j=0;j<tokens.length;j++)
+	        {
+//	        	System.out.println(tokens[j]);
+	        	if( ! (tokens[j].equals("")) || (tokens[j].equals(" ")) )
+	        	{
+	        		int value = Integer.parseInt(tokens[j]);
+	        		node.insertNode(value,MyBSTree.rootNode);
+	        	}
+	        }
+	        // print the final result
+	        // reinitiaize the tree 
+	        node.displayInOrder(MyBSTree.rootNode);
+//	        node.displayDulicates();
+	        System.out.println();
+	        node = new MyBSTree();
+	        
+	       }
+	    }
+	    catch(Exception e)
+	    {
+	    	e.printStackTrace();
+	    	System.out.println(e.toString());
+	      System.out.println("Unhandled input...");
+	    }
+	    finally
+	    {
+	     input.close();
+	    }
+	}
+	
+}
